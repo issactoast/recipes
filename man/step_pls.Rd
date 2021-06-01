@@ -2,7 +2,6 @@
 % Please edit documentation in R/pls.R
 \name{step_pls}
 \alias{step_pls}
-\alias{tidy.step_pls}
 \title{Partial Least Squares Feature Extraction}
 \usage{
 step_pls(
@@ -21,16 +20,13 @@ step_pls(
   skip = FALSE,
   id = rand_id("pls")
 )
-
-\method{tidy}{step_pls}(x, ...)
 }
 \arguments{
 \item{recipe}{A recipe object. The step will be added to the
 sequence of operations for this recipe.}
 
 \item{...}{One or more selector functions to choose which variables will be
-used to compute the dimensions. See \code{\link[=selections]{selections()}} for more details. For the
-\code{tidy} method, these are not currently used.}
+used to compute the dimensions. See \code{\link[=selections]{selections()}} for more details.}
 
 \item{role}{For model terms created by this step, what analysis role should
 they be assigned?. By default, the function assumes that the new dimension
@@ -75,14 +71,10 @@ Care should be taken when using \code{skip = TRUE} as it may affect
 the computations for subsequent operations}
 
 \item{id}{A character string that is unique to this step to identify it.}
-
-\item{x}{A \code{step_pls} object}
 }
 \value{
 An updated version of \code{recipe} with the new step
-added to the sequence of existing steps (if any). For the
-\code{tidy} method, a tibble with columns \code{terms} (the
-selectors or variables selected), \code{components}, and \code{values}.
+added to the sequence of existing steps (if any).
 }
 \description{
 \code{step_pls} creates a \emph{specification} of a recipe step that will
@@ -109,7 +101,7 @@ non-zero coefficients in each component. \code{step_pls()} converts this
 proportion to determine the \code{keepX} parameter in \code{mixOmics::spls()} and
 \code{mixOmics::splsda()}. See the references in \code{mixOmics::spls()} for details.
 
-The \code{tidy()} method returns the coefficients that are usually defined as
+The \code{\link[=tidy]{tidy()}} method returns the coefficients that are usually defined as
 
 \deqn{W(P'W)^{-1}}
 
@@ -117,7 +109,8 @@ The \code{tidy()} method returns the coefficients that are usually defined as
 
 When applied to data, these values are usually scaled by a column-specific
 norm. The \code{tidy()} method applies this same norm to the coefficients shown
-above.
+above. When you \code{tidy()} this step, a tibble with columns \code{terms} (the
+selectors or variables selected), \code{components}, and \code{values} is returned.
 }
 \examples{
 # requires the Bioconductor mixOmics package
@@ -168,7 +161,7 @@ sparse_plsda <-
 
 Rohart F, Gautier B, Singh A, Lê Cao K-A (2017) \emph{mixOmics: An R package for
 'omics feature selection and multiple data integration}. PLoS Comput Biol
-13(11): e1005752. \url{https://doi.org/10.1371/journal.pcbi.1005752}
+13(11): e1005752. \doi{10.1371/journal.pcbi.1005752}
 }
 \seealso{
 \code{\link[=step_pca]{step_pca()}}, \code{\link[=step_kpca]{step_kpca()}}, \code{\link[=step_ica]{step_ica()}}, \code{\link[=recipe]{recipe()}},

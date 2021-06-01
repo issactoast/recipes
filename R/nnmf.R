@@ -8,8 +8,7 @@
 #' @inherit step_center return
 #' @param ... One or more selector functions to choose which
 #'  variables will be used to compute the components. See
-#'  [selections()] for more details. For the `tidy`
-#'  method, these are not currently used.
+#'  [selections()] for more details.
 #' @param role For model terms created by this step, what analysis
 #'  role should they be assigned?. By default, the function assumes
 #'  that the new component columns created by the
@@ -22,7 +21,8 @@
 #'  to obtain a consensus projection.
 #' @param options A list of options to `nmf()` in the NMF package by way of the
 #'  `NNMF()` function in the `dimRed` package. **Note** that the arguments
-#'  `data` and `ndim` should not be passed here.
+#'  `data` and `ndim` should not be passed here, and that NMF's parallel
+#'  processing is turned off in favor of resample-level parallelization.
 #' @param res The `NNMF()` object is stored
 #'  here once this preprocessing step has been trained by
 #'  [prep.recipe()].
@@ -33,9 +33,7 @@
 #' @param keep_original_cols A logical to keep the original variables in the
 #'  output. Defaults to `FALSE`.
 #' @return An updated version of `recipe` with the new step
-#'  added to the sequence of existing steps (if any). For the
-#'  `tidy` method, a tibble with columns `terms` (the
-#'  selectors or variables selected) and the number of components.
+#'  added to the sequence of existing steps (if any).
 #' @keywords datagen
 #' @concept preprocessing
 #' @concept nnmf
@@ -53,6 +51,9 @@
 #'  if `num < 10`, their names will be `NNMF1` - `NNMF9`.
 #'  If `num = 101`, the names would be `NNMF001` -
 #'  `NNMF101`.
+#'
+#' When you [`tidy()`] this step, a tibble with column `terms` (the
+#'  selectors or variables selected) and the number of components is returned.
 #'
 #' @examples
 #'
@@ -146,12 +147,8 @@ prep.step_nnmf <- function(x, training, info = NULL, ...) {
     opts$.mute <- c("message", "output")
     opts$.data <- dimRed::dimRedData(as.data.frame(training[, col_names, drop = FALSE]))
     opts$.method <- "NNMF"
-
-    for (i in nmf_pkg) {
-      suppressPackageStartupMessages(
-        require(i, character.only = TRUE)
-      )
-    }
+    nmf_opts <- list(parallel = FALSE, parallel.required = FALSE)
+    opts$options <- list(.options = nmf_opts)
 
     nnm <- try(do.call(dimRed::embed, opts), silent = TRUE)
     if (inherits(nnm, "try-error")) {
@@ -211,7 +208,7 @@ print.step_nnmf <- function(x, width = max(20, options()$width - 29), ...) {
 }
 
 
-#' @rdname step_nnmf
+#' @rdname tidy.recipe
 #' @param x A `step_nnmf` object.
 tidy.step_nnmf <- function(x, ...) {
   if (is_trained(x)) {
@@ -252,8 +249,6 @@ tunable.step_nnmf <- function(x, ...) {
   )
 }
 
-
-nmf_pkg <- c("dimRed", "NMF")
 #' @rdname required_pkgs.step
 #' @export
 required_pkgs.step_nnmf <- function(x, ...) {

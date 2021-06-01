@@ -8,8 +8,7 @@
 #' @param ... One or more selector functions to choose which
 #'  variables are affected by the step. See [selections()] for more
 #'  details. These columns should be non-integer numerics (i.e.,
-#'  double precision). For the `tidy` method, these are not
-#'  currently used.
+#'  double precision).
 #' @param role Not used by this step since no new variables are
 #'  created.
 #' @param columns A named numeric vector of columns. This is
@@ -21,9 +20,7 @@
 #'  the imputed value. Only complete values will be passed to the function and
 #'  it should return a double precision value.
 #' @return An updated version of `recipe` with the new step
-#'  added to the sequence of existing steps (if any). For the
-#'  `tidy` method, a tibble with columns `terms` (the
-#'  selectors or variables selected) and `window` (the window size).
+#'  added to the sequence of existing steps (if any).
 #' @keywords datagen
 #' @concept preprocessing
 #' @concept imputation
@@ -42,6 +39,9 @@
 #'  window data used for imputation. In other words, each imputation
 #'  does not know anything about previous imputations in the series
 #'  prior to the current point.
+#'
+#'  When you [`tidy()`] this step, a tibble with columns `terms` (the
+#'  selectors or variables selected) and `window` (the window size) is returned.
 #'
 #'  As of `recipes` 0.1.16, this function name changed from `step_rollimpute()`
 #'    to `step_impute_roll()`.
@@ -105,6 +105,7 @@ step_impute_roll <-
 
 #' @rdname step_impute_roll
 #' @export
+#' @keywords internal
 step_rollimpute <-
   function(recipe,
            ...,
@@ -169,6 +170,7 @@ prep.step_impute_roll <- function(x, training, info = NULL, ...) {
 }
 
 #' @export
+#' @keywords internal
 prep.step_rollimpute <- prep.step_impute_roll
 
 get_window_ind <- function(i, n, k) {
@@ -217,6 +219,7 @@ bake.step_impute_roll <- function(object, new_data, ...) {
 }
 
 #' @export
+#' @keywords internal
 bake.step_rollimpute <- bake.step_impute_roll
 
 #' @export
@@ -228,9 +231,10 @@ print.step_impute_roll <-
   }
 
 #' @export
+#' @keywords internal
 print.step_rollimpute <- print.step_impute_roll
 
-#' @rdname step_impute_roll
+#' @rdname tidy.recipe
 #' @param x A `step_impute_roll` object.
 #' @export
 tidy.step_impute_roll <- function(x, ...) {
@@ -245,6 +249,7 @@ tidy.step_impute_roll <- function(x, ...) {
 }
 
 #' @export
+#' @keywords internal
 tidy.step_rollimpute <- tidy.step_impute_roll
 
 #' @rdname tunable.step
@@ -263,4 +268,5 @@ tunable.step_impute_roll <- function(x, ...) {
 }
 
 #' @export
+#' @keywords internal
 tunable.step_rollimpute <- tunable.step_impute_roll

@@ -30,7 +30,6 @@ reference:
     - has_type
     - current_info
     - add_role
-    - tidy.recipe
   - title: Step Functions - Imputation
     contents:
     - starts_with("step_impute_")
@@ -89,7 +88,6 @@ reference:
     - step_geodist
     - step_ica
     - step_isomap
-    - step_kpca
     - step_kpca_poly
     - step_kpca_rbf
     - step_mutate_at
@@ -109,7 +107,6 @@ reference:
   - title: Step Functions - Row Operations
     contents:
     - step_arrange
-    - step_downsample
     - step_filter
     - step_lag
     - step_naomit
@@ -117,7 +114,6 @@ reference:
     - step_sample
     - step_shuffle
     - step_slice
-    - step_upsample
   - title: Step Functions - Others
     contents:
     - step_intercept
@@ -137,6 +133,9 @@ reference:
     - prepper
     - terms_select
     - update.step
+  - title: Tidy Methods
+    contents:
+    - tidy.recipe
 
 
 navbar:
@@ -158,9 +157,9 @@ navbar:
       - text: "On Skipping Steps"
         href: articles/Skipping.html
       - text: "Subsampling for Class Imbalances"
-        href: articles/articles/Subsampling.html
+        href: https://www.tidymodels.org/learn/models/sub-sampling/
       - text: "Multivariate Analysis using Partial Least Squares"
-        href: articles/articles/Multivariate_PLS.html
+        href: https://www.tidymodels.org/learn/models/pls/
   - text: Reference
     href: reference/index.html
   - text: News
